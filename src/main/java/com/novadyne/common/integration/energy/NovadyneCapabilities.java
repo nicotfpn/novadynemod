@@ -9,7 +9,7 @@ public final class NovadyneCapabilities {
 
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
         registerItemEnergy(event, ModItems.EXOSUIT_TIER1.get(),
-                stack -> new ExosuitEnergyItemHandler(stack, 10000L));
+                stack -> new ExosuitEnergyItemHandler(stack, com.novadyne.NovaDyneMod.EXOSUIT_TIER1_MAX_ENERGY));
     }
 
     public static void registerBlockEntityEnergy(RegisterCapabilitiesEvent event,

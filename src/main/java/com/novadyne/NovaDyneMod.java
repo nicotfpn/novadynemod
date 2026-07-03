@@ -16,6 +16,10 @@ public class NovaDyneMod {
     public static final String MODID = "novadyne";
     public static final Logger LOGGER = LogUtils.getLogger();
 
+    private static final float ABSORPTION_RATIO = 0.5f;
+    private static final long ENERGY_PER_DAMAGE_POINT = 100L;
+    public static final long EXOSUIT_TIER1_MAX_ENERGY = 750L;
+
     public NovaDyneMod(IEventBus modEventBus) {
         ModItems.ITEMS.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
@@ -35,10 +39,20 @@ public class NovaDyneMod {
         float damage = event.getAmount();
         if (damage <= 0) return;
 
-        long toConsume = Math.min(Math.round(damage), energy);
-        float remaining = damage - toConsume;
+        // Calculate max damage that can be absorbed based on energy
+        float maxAbsorbDamageByEnergy = (float) energy / ENERGY_PER_DAMAGE_POINT;
+        // Calculate proportional absorption (50% of damage)
+        float proportionalAbsorb = damage * ABSORPTION_RATIO;
+        // Actual absorbed damage is the minimum of the two
+        float actualAbsorb = Math.min(maxAbsorbDamageByEnergy, proportionalAbsorb);
+        // Energy to consume (100 per point of damage absorbed)
+        long energyToConsume = (long) Math.round(actualAbsorb * ENERGY_PER_DAMAGE_POINT);
+        // Ensure we don't consume more energy than we have, and cap at max energy
+        long newEnergy = Math.max(0, Math.min(energy - energyToConsume, EXOSUIT_TIER1_MAX_ENERGY));
+        // Remaining damage after absorption
+        float remaining = damage - actualAbsorb;
 
-        chestStack.set(ModDataComponents.EXOSUIT_ENERGY.get(), energy - toConsume);
+        chestStack.set(ModDataComponents.EXOSUIT_ENERGY.get(), newEnergy);
 
         if (remaining <= 0.0f) {
             event.setCanceled(true);
