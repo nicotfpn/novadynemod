@@ -10,16 +10,23 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public final class OBJLoader {
     private static final Map<String, OBJModel> CACHE = new HashMap<>();
+    private static final Map<String, Map<String, int[]>> OBJECT_RANGES_CACHE = new HashMap<>();
 
     private OBJLoader() {}
 
     public static OBJModel getModel(String path) {
         return CACHE.computeIfAbsent(path, OBJLoader::loadModel);
+    }
+
+    public static Map<String, int[]> getObjectRanges(String path) {
+        getModel(path);
+        return OBJECT_RANGES_CACHE.get(path);
     }
 
     private static OBJModel loadModel(String path) {
@@ -33,6 +40,10 @@ public final class OBJLoader {
         List<Float> outUvs = new ArrayList<>();
         List<Float> outNormals = new ArrayList<>();
 
+        Map<String, int[]> objectRanges = new LinkedHashMap<>();
+        String currentObject = null;
+        int objectStart = 0;
+
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(Minecraft.getInstance().getResourceManager().open(location)))) {
 
@@ -40,11 +51,20 @@ public final class OBJLoader {
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
 
-                if (line.isEmpty() || line.startsWith("#") || line.startsWith("s ") || line.startsWith("o ") || line.startsWith("g ") || line.startsWith("usemtl ")) {
+                if (line.isEmpty() || line.startsWith("#") || line.startsWith("s ") || line.startsWith("g ") || line.startsWith("usemtl ")) {
                     continue;
                 }
 
-                if (line.startsWith("v ")) {
+                if (line.startsWith("o ")) {
+                    if (currentObject != null) {
+                        int objectEnd = outVertices.size() / 3;
+                        if (objectEnd > objectStart) {
+                            objectRanges.put(currentObject, new int[]{objectStart, objectEnd});
+                        }
+                    }
+                    currentObject = line.substring(2).trim();
+                    objectStart = outVertices.size() / 3;
+                } else if (line.startsWith("v ")) {
                     String[] parts = line.split("\\s+");
                     if (parts.length >= 4) {
                         rawVertices.add(new float[]{
@@ -86,6 +106,13 @@ public final class OBJLoader {
                     }
                 }
             }
+
+            if (currentObject != null) {
+                int objectEnd = outVertices.size() / 3;
+                if (objectEnd > objectStart) {
+                    objectRanges.put(currentObject, new int[]{objectStart, objectEnd});
+                }
+            }
         } catch (IOException e) {
             NovaDyneMod.LOGGER.error("Failed to load OBJ model: {}", path, e);
             return createFallbackModel();
@@ -99,6 +126,7 @@ public final class OBJLoader {
             idxArr[i] = i;
         }
 
+        OBJECT_RANGES_CACHE.put(path, objectRanges);
         return new OBJModel(verts, uvArr, normArr, idxArr);
     }
 
@@ -174,5 +202,6 @@ public final class OBJLoader {
 
     public static void clearCache() {
         CACHE.clear();
+        OBJECT_RANGES_CACHE.clear();
     }
 }

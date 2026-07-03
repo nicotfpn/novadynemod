@@ -19,7 +19,11 @@ public class OBJModel {
     }
 
     public void render(PoseStack.Pose pose, VertexConsumer consumer, int packedLight, int packedOverlay, float r, float g, float b, float a) {
-        for (int i = 0; i < indices.length; i += 3) {
+        renderRange(pose, consumer, 0, indices.length, packedLight, packedOverlay, r, g, b, a);
+    }
+
+    public void renderRange(PoseStack.Pose pose, VertexConsumer consumer, int startIndex, int endIndex, int packedLight, int packedOverlay, float r, float g, float b, float a) {
+        for (int i = startIndex; i < endIndex; i += 3) {
             for (int j = 0; j < 3; j++) {
                 int idx = indices[i + j];
                 consumer.addVertex(pose, vertices[idx * 3], vertices[idx * 3 + 1], vertices[idx * 3 + 2])
