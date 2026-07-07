@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "novadyne:item/exosuit_tier1_chestplate"
+  }
+}

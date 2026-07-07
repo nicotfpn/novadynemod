@@ -113,6 +113,9 @@ public final class OBJLoader {
                     objectRanges.put(currentObject, new int[]{objectStart, objectEnd});
                 }
             }
+
+            NovaDyneMod.LOGGER.debug("OBJ model '{}' loaded successfully: {} vertices, {} triangles, {} objects",
+                    path, outVertices.size() / 3, outVertices.size() / 9, objectRanges.size());
         } catch (IOException e) {
             NovaDyneMod.LOGGER.error("Failed to load OBJ model: {}", path, e);
             return createFallbackModel();

@@ -14,8 +14,12 @@ public class ModCreativeTabs {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> NOVADYNE_TAB =
             CREATIVE_MODE_TABS.register("novadyne", () -> CreativeModeTab.builder()
                     .title(Component.literal("NovaDyne"))
-                    .icon(() -> new ItemStack(ModItems.EXOSUIT_TIER1.get()))
+                    .icon(() -> new ItemStack(ModItems.EXOSUIT_TIER1_CHESTPLATE.get()))
                     .displayItems((parameters, output) -> {
-                        output.accept(new ItemStack(ModItems.EXOSUIT_TIER1.get()));
+                        output.accept(new ItemStack(ModItems.EXOSUIT_TIER1_HELMET.get()));
+                        output.accept(new ItemStack(ModItems.EXOSUIT_TIER1_CHESTPLATE.get()));
+                        output.accept(new ItemStack(ModItems.EXOSUIT_TIER1_LEGGINGS.get()));
+                        output.accept(new ItemStack(ModItems.EXOSUIT_TIER1_BOOTS.get()));
+                        output.accept(new ItemStack(ModItems.EXOSUIT_INGOT.get()));
                     }).build());
 }

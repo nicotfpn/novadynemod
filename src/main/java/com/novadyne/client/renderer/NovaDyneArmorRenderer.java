@@ -24,7 +24,7 @@ public class NovaDyneArmorRenderer extends RenderLayer<AvatarRenderState, Player
 
     private static final String MODEL_PATH = "models/entity/exosuit_tier1.obj";
 
-    private enum Part { HEAD, BODY, LEFT_ARM, RIGHT_ARM, LEFT_LEG, RIGHT_LEG, BOOTS_LEFT, BOOTS_RIGHT }
+    private enum Part { BODY, LEFT_ARM, RIGHT_ARM, LEFT_LEG, RIGHT_LEG, BOOTS_LEFT, BOOTS_RIGHT }
 
     private OBJModel currentModel;
     private int[] currentRange = new int[2];
@@ -33,18 +33,29 @@ public class NovaDyneArmorRenderer extends RenderLayer<AvatarRenderState, Player
 
     public NovaDyneArmorRenderer(RenderLayerParent<AvatarRenderState, PlayerModel> renderer) {
         super(renderer);
+        NovaDyneMod.LOGGER.debug("NovaDyneArmorRenderer initialized");
     }
 
     @Override
     public void submit(PoseStack poseStack, SubmitNodeCollector collector, int packedLight,
                        AvatarRenderState renderState, float limbSwing, float limbSwingAmount) {
-        ItemStack chestStack = renderState.chestEquipment;
-        if (!(chestStack.getItem() instanceof ExosuitTier1Item)) return;
+        // Check all 4 equipment slots for any exosuit piece
+        ItemStack stack = findExosuitPiece(renderState);
+        if (stack == null || stack.isEmpty()) return;
 
-        Identifier texture = getArmorTexture(chestStack);
+        if (!(stack.getItem() instanceof ExosuitTier1Item)) return;
+
+        NovaDyneMod.LOGGER.debug("Rendering exosuit armor for player");
+
+        Identifier texture = getArmorTexture(stack);
         OBJModel model = OBJLoader.getModel(MODEL_PATH);
         Map<String, int[]> ranges = OBJLoader.getObjectRanges(MODEL_PATH);
-        if (model == null || ranges == null) return;
+        if (model == null || ranges == null) {
+            NovaDyneMod.LOGGER.error("OBJ model or ranges null for path: {}", MODEL_PATH);
+            return;
+        }
+
+        NovaDyneMod.LOGGER.debug("OBJ model loaded, {} object ranges found", ranges.size());
 
         currentModel = model;
         currentLight = packedLight;
@@ -56,8 +67,9 @@ public class NovaDyneArmorRenderer extends RenderLayer<AvatarRenderState, Player
         for (Map.Entry<String, int[]> entry : ranges.entrySet()) {
             String name = entry.getKey();
             int[] range = entry.getValue();
-            Part part = getPart(name);
+            if (range == null || range.length < 2) continue;
 
+            Part part = getPart(name);
             if (part == null) continue;
 
             currentRange[0] = range[0];
@@ -71,13 +83,36 @@ public class NovaDyneArmorRenderer extends RenderLayer<AvatarRenderState, Player
         }
     }
 
+    private static ItemStack findExosuitPiece(AvatarRenderState state) {
+        for (ItemStack s : new ItemStack[]{
+                state.headEquipment,
+                state.chestEquipment,
+                state.legsEquipment,
+                state.feetEquipment
+        }) {
+            if (!s.isEmpty() && s.getItem() instanceof ExosuitTier1Item) {
+                return s;
+            }
+        }
+        return null;
+    }
+
     private void renderCurrentRange(PoseStack.Pose pose, VertexConsumer consumer) {
         currentModel.renderRange(pose, consumer, currentRange[0], currentRange[1], currentLight, currentOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     private static Part getPart(String name) {
-        if (name.startsWith("chest_body_")) {
-            return Part.HEAD;
+        if (name.startsWith("boots_left")) {
+            return Part.BOOTS_LEFT;
+        }
+        if (name.startsWith("boots_right")) {
+            return Part.BOOTS_RIGHT;
+        }
+        if (name.startsWith("leggings_left") || name.startsWith("shared_boots_leggings_left")) {
+            return Part.LEFT_LEG;
+        }
+        if (name.startsWith("leggings_right") || name.startsWith("shared_boots_leggings_right")) {
+            return Part.RIGHT_LEG;
         }
         if (name.startsWith("chest_left_arm_")) {
             return Part.LEFT_ARM;
@@ -85,22 +120,10 @@ public class NovaDyneArmorRenderer extends RenderLayer<AvatarRenderState, Player
         if (name.startsWith("chest_right_arm_")) {
             return Part.RIGHT_ARM;
         }
-        if (name.startsWith("shared_chest_leggings")) {
+        if (name.startsWith("chest_body_") || name.startsWith("chest_")) {
             return Part.BODY;
         }
-        if (name.startsWith("leggings_right") || name.startsWith("shared_boots_leggings_right")) {
-            return Part.RIGHT_LEG;
-        }
-        if (name.startsWith("leggings_left") || name.startsWith("shared_boots_leggings_left")) {
-            return Part.LEFT_LEG;
-        }
-        if (name.startsWith("boots_right")) {
-            return Part.BOOTS_RIGHT;
-        }
-        if (name.startsWith("boots_left")) {
-            return Part.BOOTS_LEFT;
-        }
-        if (name.startsWith("chest_")) {
+        if (name.startsWith("shared_chest_leggings")) {
             return Part.BODY;
         }
         return null;
@@ -108,9 +131,6 @@ public class NovaDyneArmorRenderer extends RenderLayer<AvatarRenderState, Player
 
     private static void applyTransform(PoseStack poseStack, PlayerModel model, Part part) {
         switch (part) {
-            case HEAD:
-                model.head.translateAndRotate(poseStack);
-                break;
             case BODY:
                 model.body.translateAndRotate(poseStack);
                 break;
