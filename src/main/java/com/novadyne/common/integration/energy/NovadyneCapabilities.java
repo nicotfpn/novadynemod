@@ -8,13 +8,7 @@ public final class NovadyneCapabilities {
     private NovadyneCapabilities() {}
 
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-        registerItemEnergy(event, ModItems.EXOSUIT_TIER1_HELMET.get(),
-                stack -> new ExosuitEnergyItemHandler(stack, com.novadyne.NovaDyneMod.EXOSUIT_TIER1_MAX_ENERGY));
-        registerItemEnergy(event, ModItems.EXOSUIT_TIER1_CHESTPLATE.get(),
-                stack -> new ExosuitEnergyItemHandler(stack, com.novadyne.NovaDyneMod.EXOSUIT_TIER1_MAX_ENERGY));
-        registerItemEnergy(event, ModItems.EXOSUIT_TIER1_LEGGINGS.get(),
-                stack -> new ExosuitEnergyItemHandler(stack, com.novadyne.NovaDyneMod.EXOSUIT_TIER1_MAX_ENERGY));
-        registerItemEnergy(event, ModItems.EXOSUIT_TIER1_BOOTS.get(),
+        registerItemEnergy(event, ModItems.EXOSUIT_TIER1.get(),
                 stack -> new ExosuitEnergyItemHandler(stack, com.novadyne.NovaDyneMod.EXOSUIT_TIER1_MAX_ENERGY));
     }
 

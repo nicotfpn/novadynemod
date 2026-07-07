@@ -1,8 +1,4 @@
 {
-  "item.novadyne.exosuit_tier1_helmet": "Exosuit Tier 1 Helmet",
-  "item.novadyne.exosuit_tier1_chestplate": "Exosuit Tier 1 Chestplate",
-  "item.novadyne.exosuit_tier1_leggings": "Exosuit Tier 1 Leggings",
-  "item.novadyne.exosuit_tier1_boots": "Exosuit Tier 1 Boots",
-  "item.novadyne.exosuit_ingot": "Exosuit Ingot",
+  "item.novadyne.exosuit_tier1": "Exosuit Tier 1",
   "itemGroup.novadyne.novadyne": "NovaDyne"
 }

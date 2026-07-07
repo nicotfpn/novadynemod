@@ -33,29 +33,18 @@ public class NovaDyneArmorRenderer extends RenderLayer<AvatarRenderState, Player
 
     public NovaDyneArmorRenderer(RenderLayerParent<AvatarRenderState, PlayerModel> renderer) {
         super(renderer);
-        NovaDyneMod.LOGGER.debug("NovaDyneArmorRenderer initialized");
     }
 
     @Override
     public void submit(PoseStack poseStack, SubmitNodeCollector collector, int packedLight,
                        AvatarRenderState renderState, float limbSwing, float limbSwingAmount) {
-        // Check all 4 equipment slots for any exosuit piece
-        ItemStack stack = findExosuitPiece(renderState);
-        if (stack == null || stack.isEmpty()) return;
+        ItemStack chestStack = renderState.chestEquipment;
+        if (!(chestStack.getItem() instanceof ExosuitTier1Item)) return;
 
-        if (!(stack.getItem() instanceof ExosuitTier1Item)) return;
-
-        NovaDyneMod.LOGGER.debug("Rendering exosuit armor for player");
-
-        Identifier texture = getArmorTexture(stack);
+        Identifier texture = getArmorTexture(chestStack);
         OBJModel model = OBJLoader.getModel(MODEL_PATH);
         Map<String, int[]> ranges = OBJLoader.getObjectRanges(MODEL_PATH);
-        if (model == null || ranges == null) {
-            NovaDyneMod.LOGGER.error("OBJ model or ranges null for path: {}", MODEL_PATH);
-            return;
-        }
-
-        NovaDyneMod.LOGGER.debug("OBJ model loaded, {} object ranges found", ranges.size());
+        if (model == null || ranges == null) return;
 
         currentModel = model;
         currentLight = packedLight;
@@ -67,9 +56,8 @@ public class NovaDyneArmorRenderer extends RenderLayer<AvatarRenderState, Player
         for (Map.Entry<String, int[]> entry : ranges.entrySet()) {
             String name = entry.getKey();
             int[] range = entry.getValue();
-            if (range == null || range.length < 2) continue;
-
             Part part = getPart(name);
+
             if (part == null) continue;
 
             currentRange[0] = range[0];
@@ -81,20 +69,6 @@ public class NovaDyneArmorRenderer extends RenderLayer<AvatarRenderState, Player
                     this::renderCurrentRange);
             poseStack.popPose();
         }
-    }
-
-    private static ItemStack findExosuitPiece(AvatarRenderState state) {
-        for (ItemStack s : new ItemStack[]{
-                state.headEquipment,
-                state.chestEquipment,
-                state.legsEquipment,
-                state.feetEquipment
-        }) {
-            if (!s.isEmpty() && s.getItem() instanceof ExosuitTier1Item) {
-                return s;
-            }
-        }
-        return null;
     }
 
     private void renderCurrentRange(PoseStack.Pose pose, VertexConsumer consumer) {

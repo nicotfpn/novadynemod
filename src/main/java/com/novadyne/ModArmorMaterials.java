@@ -16,17 +16,17 @@ public class ModArmorMaterials {
             ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath(NovaDyneMod.MODID, "exosuit_tier1"));
 
     public static final ArmorMaterial EXOSUIT_TIER1 = new ArmorMaterial(
-            33,
+            15,
             Map.of(
                     ArmorType.HELMET, 3,
-                    ArmorType.CHESTPLATE, 8,
-                    ArmorType.LEGGINGS, 6,
+                    ArmorType.CHESTPLATE, 7,
+                    ArmorType.LEGGINGS, 5,
                     ArmorType.BOOTS, 3
             ),
-            15,
+            12,
             SoundEvents.ARMOR_EQUIP_IRON,
-            2.0F,
-            0.1F,
+            1.0F,
+            0.0F,
             ItemTags.REPAIRS_IRON_ARMOR,
             EXOSUIT_TIER1_ASSET
     );
