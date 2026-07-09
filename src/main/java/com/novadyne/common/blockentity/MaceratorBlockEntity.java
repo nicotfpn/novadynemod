@@ -63,6 +63,16 @@ public class MaceratorBlockEntity extends AbstractMachineBlockEntity {
         ItemStack result = findRecipe(input);
         if (result.isEmpty()) return false;
 
+        if (input.is(ModItems.PART_ELECTRONIC_FAILED_SILICON_WAFER.get())) {
+            if (!output.isEmpty()) {
+                if (!output.is(ModItems.PART_COPPER_LAYER.get()) && !output.is(ModItems.PART_BASE_WAFER.get()))
+                    return false;
+                if (output.getCount() >= output.getMaxStackSize())
+                    return false;
+            }
+            return true;
+        }
+
         if (!output.isEmpty()) {
             if (!ItemStack.isSameItemSameComponents(result, output)) return false;
             if (output.getCount() + result.getCount() > output.getMaxStackSize()) return false;
@@ -76,15 +86,16 @@ public class MaceratorBlockEntity extends AbstractMachineBlockEntity {
         ItemStack input = inventory.getStackInSlot(SLOT_INPUT);
         ItemStack result = findRecipe(input);
 
-        // Failed wafer: 50% chance per item (rounded down)
+        // Failed wafer: 50/50 chance per item between copper layer and base wafer
         if (input.is(ModItems.PART_ELECTRONIC_FAILED_SILICON_WAFER.get())) {
-            int count = input.getCount();
-            int halfCount = count / 2;
-            if (halfCount > 0) {
-                ItemStack copperOut = new ItemStack(ModItems.PART_COPPER_LAYER.get(), halfCount);
-                insertOrDropOutput(copperOut);
+            ItemStack output;
+            if (level != null && level.getRandom().nextBoolean()) {
+                output = new ItemStack(ModItems.PART_COPPER_LAYER.get(), 1);
+            } else {
+                output = new ItemStack(ModItems.PART_BASE_WAFER.get(), 1);
             }
-            inventory.extractItem(SLOT_INPUT, count, false);
+            inventory.extractItem(SLOT_INPUT, 1, false);
+            insertOrDropOutput(output);
             return;
         }
 
