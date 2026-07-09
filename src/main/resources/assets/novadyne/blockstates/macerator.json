@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "novadyne:block/macerator", "y": 0 },
+    "facing=east":  { "model": "novadyne:block/macerator", "y": 90 },
+    "facing=south": { "model": "novadyne:block/macerator", "y": 180 },
+    "facing=west":  { "model": "novadyne:block/macerator", "y": 270 }
+  }
+}

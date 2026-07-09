@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    { "item": "novadyne:valve_tier_5" },
+    { "item": "minecraft:netherite_scrap" },
+    { "item": "minecraft:netherite_scrap" },
+    { "item": "minecraft:redstone_block" },
+    { "item": "minecraft:redstone_block" },
+    { "item": "minecraft:redstone_block" },
+    { "item": "minecraft:redstone_block" }
+  ],
+  "result": {
+    "id": "novadyne:valve_tier_6",
+    "count": 1
+  }
+}

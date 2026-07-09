@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "novadyne:block/processor", "y": 0 },
+    "facing=east":  { "model": "novadyne:block/processor", "y": 90 },
+    "facing=south": { "model": "novadyne:block/processor", "y": 180 },
+    "facing=west":  { "model": "novadyne:block/processor", "y": 270 }
+  }
+}

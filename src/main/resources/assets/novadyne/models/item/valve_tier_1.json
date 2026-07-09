@@ -1,0 +1,1 @@
+{ "parent": "minecraft:item/generated", "textures": { "layer0": "novadyne:item/valve_tier_1" } }

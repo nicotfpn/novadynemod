@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "novadyne:block/litografia", "y": 0 },
+    "facing=east":  { "model": "novadyne:block/litografia", "y": 90 },
+    "facing=south": { "model": "novadyne:block/litografia", "y": 180 },
+    "facing=west":  { "model": "novadyne:block/litografia", "y": 270 }
+  }
+}

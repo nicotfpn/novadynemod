@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "tag": "c:gems/quartz"
+  },
+  "result": {
+    "id": "novadyne:pure_silicon"
+  },
+  "experience": 0.2,
+  "cookingtime": 100
+}

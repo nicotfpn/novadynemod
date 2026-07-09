@@ -13,6 +13,8 @@ public class NovaDyneMod {
 
     public NovaDyneMod(IEventBus modEventBus) {
         ModItems.ITEMS.register(modEventBus);
+        ModBlocks.BLOCKS.register(modEventBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModDataComponents.DATA_COMPONENTS.register(modEventBus);
         modEventBus.addListener(NovadyneCapabilities::onRegisterCapabilities);

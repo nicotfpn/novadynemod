@@ -1,4 +1,27 @@
 {
   "itemGroup.novadyne.novadyne": "NovaDyne",
+
+  "block.novadyne.macerator": "Macerator",
+  "block.novadyne.wafer_press": "Wafer Press",
+  "block.novadyne.processor": "Processor",
+  "block.novadyne.litografia": "Lithography",
+
+  "item.novadyne.pure_silicon": "Pure Silicon",
+  "item.novadyne.part_silicon_wafer": "Silicon Wafer",
+  "item.novadyne.ceramic_powder": "Ceramic Powder",
+  "item.novadyne.part_copper_layer": "Copper Layer",
+  "item.novadyne.part_base_wafer": "Base Wafer",
+  "item.novadyne.stacked_electronic_circuit": "Stacked Electronic Circuit",
+  "item.novadyne.part_electronic_dirty_silicon_wafer": "Dirty Silicon Wafer",
+  "item.novadyne.part_electronic_failed_silicon_wafer": "Failed Silicon Wafer",
+  "item.novadyne.part_electronic_etched_silicon_wafer": "Etched Silicon Wafer",
+  "item.novadyne.valve_tier_1": "Valve (Tier 1)",
+  "item.novadyne.valve_tier_2": "Valve (Tier 2)",
+  "item.novadyne.valve_tier_3": "Valve (Tier 3)",
+  "item.novadyne.valve_tier_4": "Valve (Tier 4)",
+  "item.novadyne.valve_tier_5": "Valve (Tier 5)",
+  "item.novadyne.valve_tier_6": "Valve (Tier 6)",
+  "item.novadyne.valve_tier_7": "Valve (Tier 7)",
+
   "tooltip.novadyne.energy": "Energy: %s / %s FE"
 }
